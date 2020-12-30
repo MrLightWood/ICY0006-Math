@@ -247,63 +247,20 @@ test <- read_csv("C:/Users/saile/Desktop/math/house/test-no-outliers.csv")
 #Declaring variables
 tPrice <- test$"price"
 tArea <- test$"sqft_living"
-tBedrooms <- test$"bedrooms"
-tBathrooms <- test$"bathrooms"
-tGrade <- test$"grade"
 
 #Declaring linear models
-areaPrice.lm<-lm(tPrice~tArea)
-areaBathrooms.lm<-lm(tBathrooms~tArea)
-areaBedrooms.lm<-lm(tBedrooms~tArea)
-areaGrade.lm<-lm(tGrade~tArea)
-priceGrade.lm<-lm(tGrade~tPrice)
+areaPrice.lm<-lm(tPrice~tArea, data = test)
 
 #LM Prediction
 areaPrice.prediction.lm <- predict (areaPrice.lm, test)
 paste0("areaPrice linear model: ",
        MAPE(areaPrice.prediction.lm,tPrice))
 
-areaBathrooms.prediction.lm <- predict (areaBathrooms.lm, test)
-paste0("areaBathrooms linear model: ",
-       MAPE(areaBathrooms.prediction.lm,tBathrooms))
-
-areaBedrooms.prediction.lm <- predict (areaBedrooms.lm, test)
-paste0("areaBedrooms linear model: ",
-       MAPE(areaBedrooms.prediction.lm,tBedrooms))
-
-areaGrade.prediction.lm <- predict (areaGrade.lm, test)
-paste0("areaGrade linear model: ",
-       MAPE(areaGrade.prediction.lm,tGrade))
-
-priceGrade.prediction.lm <- predict (priceGrade.lm, test)
-paste0("priceGrade linear model: ",
-       MAPE(priceGrade.prediction.lm,tGrade))
-
 #SVM Prediction
 areaPrice.svm<-svm(tPrice ~ tArea, data = test)
 areaPrice.prediction.svm <- predict(areaPrice.svm, tArea)
 paste0("areaPrice svm model: ",
        MAPE(areaPrice.prediction.svm,tPrice))
-
-areaBathrooms.svm<-svm(tBathrooms ~ tArea, data = test)
-areaBathrooms.prediction.svm <- predict(areaBathrooms.svm, tArea)
-paste0("areaBathrooms svm model: ",
-       MAPE(areaBathrooms.prediction.svm,tBathrooms))
-
-areaBedrooms.svm<-svm(tBedrooms ~ tArea, data = test)
-areaBedrooms.prediction.svm <- predict(areaBedrooms.svm, tArea)
-paste0("areaBedrooms svm model: ",
-       MAPE(areaBedrooms.prediction.svm,tBedrooms))
-
-areaGrade.svm<-svm(tGrade ~ tArea, data = test)
-areaGrade.prediction.svm <- predict(areaGrade.svm, tArea)
-paste0("areaGrade svm model: ",
-       MAPE(areaGrade.prediction.svm,tGrade))
-
-priceGrade.svm<-svm(tGrade ~ tPrice, data = test)
-priceGrade.prediction.svm <- predict(priceGrade.svm, tPrice)
-paste0("areaGrade svm model: ",
-       MAPE(priceGrade.prediction.svm,tGrade))
 
 #Area & Price Prediction Plot
 plot( tArea,tPrice, xlab="Area", ylab="Price", pch=21)
@@ -316,51 +273,3 @@ points(tArea,
        col = "red",
        pch = 16)
 abline(lm(dPrice ~ dArea, data = main), col = "green")
-
-#Area & Bathrooms Prediction Plot
-plot( tArea,tBathrooms, xlab="Area", ylab="Bathrooms", pch=21)
-points (tArea,
-        areaBathrooms.prediction.lm,
-        col = "blue",
-        pch = 16)
-points(tArea,
-       areaBathrooms.prediction.svm,
-       col = "red",
-       pch = 16)
-abline(lm(dBathrooms ~ dArea, data = main), col = "green")
-
-#Area & Bedrooms Prediction Plot
-plot( tArea,tBedrooms, xlab="Area", ylab="Bedrooms", pch=21)
-points (tArea,
-        areaBedrooms.prediction.lm,
-        col = "blue",
-        pch = 16)
-points(tArea,
-       areaBedrooms.prediction.svm,
-       col = "red",
-       pch = 16)
-abline(lm(dBedrooms ~ dArea, data = main), col = "green")
-
-#Area & Grade Prediction Plot
-plot( tArea,tGrade, xlab="Area", ylab="Grade", pch=21)
-points (tArea,
-        areaGrade.prediction.lm,
-        col = "blue",
-        pch = 16)
-points(tArea,
-       areaGrade.prediction.svm,
-       col = "red",
-       pch = 16)
-abline(lm(dGrade ~ dArea, data = main), col = "green")
-
-#Price & Grade Prediction Plot
-plot( tPrice,tGrade, xlab="Price", ylab="Grade", pch=21)
-points (tPrice,
-        priceGrade.prediction.lm,
-        col = "blue",
-        pch = 16)
-points(tPrice,
-       priceGrade.prediction.svm,
-       col = "red",
-       pch = 16)
-abline(lm(dGrade ~ dPrice, data = main), col = "green")
