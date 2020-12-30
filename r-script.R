@@ -57,7 +57,6 @@ mean(dBathrooms, trim = 0, na.rm = FALSE)
 mean(dFloors, trim = 0, na.rm = FALSE)
 mean(dCondition, trim = 0, na.rm = FALSE)
 mean(dGrade, trim = 0, na.rm = FALSE)
-mean(dYear, trim = 0, na.rm = FALSE)
 
 gm_mean(dPrice)
 gm_mean(dArea)
@@ -66,7 +65,6 @@ gm_mean(dBathrooms)
 gm_mean(dFloors)
 gm_mean(dCondition)
 gm_mean(dGrade)
-gm_mean(dYear)
 
 median(dPrice, trim = 0, na.rm = FALSE)
 median(dArea, trim = 0, na.rm = FALSE)
@@ -182,12 +180,12 @@ ggscatter(main, x = "sqft_living", y = "grade",
           xlab = "Area", ylab = "Grade")
 
 ggscatter(main, x = "sqft_living", y = "condition", 
-          add = "reg.line", conf.int = TRUE, 
+          #add = "reg.line", conf.int = TRUE, 
           cor.coef = TRUE, cor.method = "pearson",
           xlab = "Area", ylab = "Condition")
 
 ggscatter(main, x = "price", y = "condition", 
-          add = "reg.line", conf.int = TRUE, 
+          #add = "reg.line", conf.int = TRUE, 
           cor.coef = TRUE, cor.method = "pearson",
           xlab = "Price", ylab = "Condition")
 
@@ -251,7 +249,11 @@ tArea <- test$"sqft_living"
 #Declaring linear models
 areaPrice.lm<-lm(tPrice~tArea, data = test)
 
+model<-lm(dPrice~dArea, data = main)
+
 #LM Prediction
+prediction.lm <- predict (model, main)
+
 areaPrice.prediction.lm <- predict (areaPrice.lm, test)
 paste0("areaPrice linear model: ",
        MAPE(areaPrice.prediction.lm,tPrice))
@@ -272,4 +274,11 @@ points(tArea,
        areaPrice.prediction.svm,
        col = "red",
        pch = 16)
+abline(lm(dPrice ~ dArea, data = main), col = "green")
+
+plot( tArea,tPrice, xlab="Area", ylab="Price", pch=21)
+points (tArea,
+        prediction.lm,
+        col = "blue",
+        pch = 16)
 abline(lm(dPrice ~ dArea, data = main), col = "green")
